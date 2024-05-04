@@ -1,5 +1,5 @@
 .gradle
 .git
 .idea
-.build
+./app/build/
 mongodb_data/
