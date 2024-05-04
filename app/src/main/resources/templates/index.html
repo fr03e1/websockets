@@ -15,11 +15,11 @@
     var stompClient = null;
 
     function connect() {
-        var socket = new SockJS('/websocket');
+        var socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function(frame) {
             console.log('Connected: ' + frame);
-            stompClient.subscribe('/app/chat', function(response) {
+            stompClient.subscribe('/user/queue/messages', function(response) {
                 showMessage(JSON.parse(response.body).content);
             });
         });
@@ -32,10 +32,16 @@
         console.log("Disconnected");
     }
 
-    function sendMessage() {
-        var messageContent = $('#messageInput').val();
-        stompClient.send("/app/chat", {}, JSON.stringify({ 'content': messageContent }));
-        $('#messageInput').val('');
+    function sendMessage(message) {
+        stompClient.send("/app/chat", {}, JSON.stringify({
+            chatId: 1,
+            senderId: 1,
+            recipientId: 1,
+            senderName: 'alex',
+            recipientName: 'bob',
+            content: message,
+            timestamp: '1',
+        }));
     }
 
     function showMessage(message) {
